@@ -85,14 +85,14 @@ class Login extends Component {
                 });
         }
         else{
-            if(this.state.username !== "guest" && this.state.loginPassword !== "password"){
-            this.setState({
-                loggedIn: false
-                });
-            }
-            else{
+            if(this.state.username === "guest" && this.state.loginPassword === "password"){
                 sessionStorage.setItem("access-token", "8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
                 ReactDOM.render(<Home/>, document.getElementById('root') );
+            }
+            else{
+                this.setState({
+                    loggedIn: false
+                });
             }
         }
     }
