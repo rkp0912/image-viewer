@@ -11,29 +11,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import ReactDOM from 'react-dom';
 import Home from '../home/Home';
 
-// const customStyles = {
-//     content: {
-//         top: '50%',
-//         left: '50%',
-//         right: 'auto',
-//         bottom: 'auto',
-//         marginRight: '-50%',
-//         transform: 'translate(-50%, -50%)'
-//     }
-// };
-
-// const TabContainer = function (props) {
-//     return (
-//         <Typography component="div" style={{ padding: 0, textAlign: 'center' }}>
-//             {props.children}
-//         </Typography>
-//     )
-// }
-
-// TabContainer.propTypes = {
-//     children: PropTypes.node.isRequired
-// }
-
+//Login page Handler
 class Login extends Component {
 
     constructor() {
@@ -60,10 +38,9 @@ class Login extends Component {
                 });
         }
         else{
-            if(this.state.username === "guest" && this.state.loginPassword === "password"){
+            if(this.state.username === "upgrad" && this.state.loginPassword === "upgrad"){
                 sessionStorage.setItem("access-token", "8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
                 ReactDOM.render(<Home/>, document.getElementById('root'));
-                // this.props.history.push('/Home/');
             }
             else{
                 this.setState({
@@ -73,14 +50,17 @@ class Login extends Component {
         }
     }
 
+    //Gets username 
     inputUsernameChangeHandler = (e) => {
         this.setState({ username: e.target.value });
     }
 
+    //Gets password
     inputLoginPasswordChangeHandler = (e) => {
         this.setState({ loginPassword: e.target.value });
     }
 
+    //Displays the login page.
     render(){        
         return(
             <div>

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './Profile.css';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -25,7 +23,7 @@ import Modal from 'react-modal';
 import Typography from '@material-ui/core/Typography';
 import Home from '../home/Home';
 
-
+//Style for the full name edit div
 const customStyles = {
     content: {
         top: '50%',
@@ -195,40 +193,7 @@ class Profile extends Component {
         }
     }
 
-    inputSearchStringChangeHandler = (e) => {
-        this.setState({ searchString: e.target.value });
-        console.log(this.state.searchString);
-        //this.getPageData();
-        //if(this.state.searchString === "")
-        {
-            let dataList = [];
-            for(let item of this.state.pageData){
-                let post = item;
-                post.filter="Normal";
-                dataList.push(post);
-            }
-            this.setState({pageData:dataList})
-        }
-        if(this.state.searchString !== "")
-        {
-            let dataList = [];
-            for(let item of this.state.pageData){
-                let post = item;
-                console.log(post.show);
-                console.log(post.caption.text.split("\n")[0].toLowerCase());
-                console.log(post.caption.text.split("\n")[0].toLowerCase().includes(this.state.searchString.toLowerCase()))
-                if(post.caption.text.split("\n")[0].toLowerCase().includes(this.state.searchString.toLowerCase()) === false){
-                    post.filter = "";
-                }
-                dataList.push(post);
-            }
-        }
-
-
-        console.log(this.state.pageData);
-    }
-
-
+    //Fetch posts from instagram
     getPageData(){
         let that = this;
         let data = null;
@@ -246,7 +211,7 @@ class Profile extends Component {
         xhrMovie.send(data);
     }
 
-
+    //Fetch the profile information on load.
     componentWillMount() {
         let that = this;
         let data = null;
@@ -266,7 +231,7 @@ class Profile extends Component {
         xhrMovie.send(data);
     }
 
-
+    //Likes or unlike the post
     likePost(data){
         let dataList = [];
         for(let item of this.state.pageData){
@@ -280,12 +245,12 @@ class Profile extends Component {
         this.setState({pageData:dataList})
     }
 
-
+    //Capture comment text
     commentTextChangeHandler = (e) => {
         this.setState({ comment: e.target.value });
     }
 
-
+    //Add comment text to the div
     AddCommentClickHandler=(data)=>{
         if(this.state.comment === "")
             return;
@@ -304,12 +269,14 @@ class Profile extends Component {
         console.log(this.state.comment);
     }
 
+    //Clears the session token and navigate to login page
     logout(){
         sessionStorage.clear();
         console.log(sessionStorage.getItem("access-token"))
         ReactDOM.render(<Login/>, document.getElementById('root'));
     }
 
+    //Name update model open and close handles
     openModelHandler = () => {
         this.setState({ modalIsOpen: true });
     }
@@ -323,30 +290,32 @@ class Profile extends Component {
         console.log(this.state.updated_full_name)
     }
 
+    //Updates the name
     updateClickHandler = () =>{
         this.setState({ modalIsOpen: false });
         console.log(this.state.updated_full_name)
         let updatedProfileData = this.state.profileData;
         updatedProfileData.data.full_name = this.state.updated_full_name;
         this.setState({profileData:updatedProfileData})
-        console.log(this.state.profileData)
     }
 
+    //Open post details when clicked    
     showPostDetails = (data) =>{
-        console.log(data)
         this.setState({postDetails:data})
         this.setState({modelDetailsIsOpen: true})
-        console.log(this.state.postDetails);
     }
 
+    //Open post details modal
     openPostsModelHandler = () =>{
         this.setState({modelDetailsIsOpen: true})
     }
 
+    //Close post details modal
     closePostsModelHandler = () =>{
         this.setState({modelDetailsIsOpen: false})
     }
 
+    //When logo is clicked, set the session token and navigate to home page.
     goToHome = () =>{
         sessionStorage.setItem("access-token", "8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
         ReactDOM.render(<Home/>, document.getElementById('root'));
@@ -358,14 +327,6 @@ class Profile extends Component {
                 <header className="app-header-home">
                     <label className="app-text" onClick={this.goToHome}>Image viewer</label>
                     <div className="app-sub-header">
-                        <div className="search-div">
-                            <div className="search-icon">
-                                <SearchIcon />
-                            </div>
-                            <InputBase
-                            placeholder="Search..." searchbar={this.state.searchString} onChange={this.inputSearchStringChangeHandler}
-                            />
-                        </div>
                         <PopupState variant="popover" popupId="demo-popup-menu">
                             {(popupState) => (
                                 <React.Fragment>
@@ -412,10 +373,6 @@ class Profile extends Component {
                     onRequestClose={this.closeModalHandler}
                     style={customStyles}
                 >
-                    {/* <Tabs className="tabs" value={this.state.value} onChange={this.tabChangeHandler}>
-                        <Tab label="Edit" />
-                    </Tabs> */}
-
                     <TabContainer>
                             <FormControl>
                                 <label className="edit-label">Edit</label>

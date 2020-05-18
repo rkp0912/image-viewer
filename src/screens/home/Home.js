@@ -25,6 +25,8 @@ import Login from '../login/Login';
 import Profile from '../profile/Profile';
 
 class Home extends Component {
+    //This constructure maintains the state.
+    //The members are populated when the page is reloaded.
     constructor() {
         super();
         this.state = {
@@ -112,46 +114,32 @@ class Home extends Component {
         }
     }
 
+    //Searches the posts based on input.
     inputSearchStringChangeHandler = (e) => {
         this.setState({ searchString: e.target.value });
-        console.log(this.state.searchString);
-        //this.getPageData();
-        //if(this.state.searchString === "")
-        {
-            let dataList = [];
-            for(let item of this.state.pageData){
-                let post = item;
-                console.log(post.show);
-                console.log(post.caption.text.split("\n")[0].toLowerCase());
-                console.log(post.caption.text.split("\n")[0].toLowerCase().includes(this.state.searchString.toLowerCase()))
-                // if(!post.caption.text.split("\n")[0].toLowerCase().includes(this.state.searchString.toLowerCase())){
-                //     post.filter = "";
-                // }
-                post.filter="Normal";
-                dataList.push(post);
-            }
-            this.setState({pageData:dataList})
+
+        let dataList = [];
+        for(let item of this.state.pageData){
+            let post = item;
+            post.filter="Normal";
+            dataList.push(post);
         }
+        this.setState({pageData:dataList})
+
         if(this.state.searchString !== "")
         {
             let dataList = [];
             for(let item of this.state.pageData){
                 let post = item;
-                console.log(post.show);
-                console.log(post.caption.text.split("\n")[0].toLowerCase());
-                console.log(post.caption.text.split("\n")[0].toLowerCase().includes(this.state.searchString.toLowerCase()))
                 if(post.caption.text.split("\n")[0].toLowerCase().includes(this.state.searchString.toLowerCase()) === false){
                     post.filter = "";
                 }
                 dataList.push(post);
             }
         }
-
-
-        console.log(this.state.pageData);
     }
 
-
+    //Fetches the posts information from the instagram page.
     getPageData(){
         let that = this;
         let data = null;
@@ -169,7 +157,7 @@ class Home extends Component {
         xhrMovie.send(data);
     }
 
-
+    //Fetch the profile information first then fetch the posts information.
     componentWillMount() {
         let that = this;
         let data = null;
@@ -189,7 +177,7 @@ class Home extends Component {
         xhrMovie.send(data);
     }
 
-
+    //Likes or dislikes the posts
     likePost(data){
         let dataList = [];
         for(let item of this.state.pageData){
@@ -204,12 +192,14 @@ class Home extends Component {
     }
 
 
+    //Captures the comment text.
     commentTextChangeHandler = (e) => {
         this.setState({ comment: e.target.value });
     }
 
 
-    AddCommentClickHandler(data, inputControl){
+    //Updates the comments on click of Add button
+    AddCommentClickHandler(data){
         if(this.state.comment === "")
             return;
 
@@ -224,15 +214,16 @@ class Home extends Component {
         }
         this.setState({pageData:dataList});
         this.setState({comment:""})
-        console.log(this.state.comment);
     }
 
+    //When logged out session key will be cleared and navigated to login page.
     logout(){
         sessionStorage.clear();
         console.log(sessionStorage.getItem("access-token"))
         ReactDOM.render(<Login/>, document.getElementById('root'));
     }
 
+    //when Acccount info button is clicked, make sure session token is set and navigate to profile page.
     profile(){
         sessionStorage.setItem("access-token", "8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
         ReactDOM.render(<Profile/>, document.getElementById('root'));
@@ -240,7 +231,6 @@ class Home extends Component {
 
 
     render(){        
-        const { classes } = this.props;
         return(
             <div>
                 <header className="app-header-home">
@@ -252,11 +242,6 @@ class Home extends Component {
                             </div>
                             <InputBase
                             placeholder="Search..." searchbar={this.state.searchString} onChange={this.inputSearchStringChangeHandler}
-                            // classes={{
-                            //     root: classes.inputRoot,
-                            //     input: classes.inputInput,
-                            // }}
-                            // inputProps={{ 'aria-label': 'search' }}
                             />
                         </div>
                         <PopupState variant="popover" popupId="demo-popup-menu">
@@ -275,17 +260,8 @@ class Home extends Component {
                     </div>
                 </header>
                 <GridList cellHeight={500} cols={2}>
-                {/* <div className="cards-div"> */}
                     {this.state.pageData.map(data => (
                         <GridListTile className="grid-item" key={"grid" + data.id} style={{ height: 'auto' }}>
-                            {/* {
-                                console.log(parseInt(data.caption.created_time))
-                            } */}
-                            {/* <img src={data.images.standard_resolution.url} className="movie-poster" alt="test" />
-                            <GridListTileBar
-                                title={data.caption.id}
-                                subtitle={<span>Release Date: {new Date(data.created_time).toDateString()}</span>}
-                            /> */}
                             <Card className="postsCard" style={{display: data.filter === "Normal" ? 'block' : 'none' }}>
                                 <CardHeader
                                     avatar={
@@ -294,7 +270,7 @@ class Home extends Component {
                                         </Avatar>
                                         }
                                      title={data.caption.from.username} 
-                                     subheader={<span>{new Date(Number(data.created_time)).toDateString()}</span>}
+                                     subheader={<span>{new Date(Number(data.created_time)*1000).toDateString()}</span>}
                                 />
                                 <CardMedia>
                                     <img src={data.images.low_resolution.url} className="movie-poster" alt="test" />
@@ -336,7 +312,6 @@ class Home extends Component {
                             </Card>
                         </GridListTile>
                     ))}
-                {/* </div> */}
                 </GridList>
             </div>
         )
