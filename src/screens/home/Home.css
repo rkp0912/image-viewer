@@ -133,3 +133,8 @@ ul.MuiGridList-root{
 .comment-username{
     font-weight: bold;
 }
+
+.post-details{
+    display: flex;
+    flex-direction: row;
+}
