@@ -4,9 +4,11 @@ import './index.css';
 import './screens/login/Login';
 import Login from './screens/login/Login';
 
+
 ReactDOM.render(
-    <span>
+    <div>
         <Login />
-    </span>, 
+    </div>, 
     document.getElementById('root')
 );
+// ReactDOM.render(<Login />, document.getElementById('root'));
