@@ -22,6 +22,7 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import ReactDOM from 'react-dom';
 import Login from '../login/Login';
+import Profile from '../profile/Profile';
 
 class Home extends Component {
     constructor() {
@@ -232,6 +233,11 @@ class Home extends Component {
         ReactDOM.render(<Login/>, document.getElementById('root'));
     }
 
+    profile(){
+        sessionStorage.setItem("access-token", "8661035776.d0fcd39.39f63ab2f88d4f9c92b0862729ee2784");
+        ReactDOM.render(<Profile/>, document.getElementById('root'));
+    }
+
 
     render(){        
         const { classes } = this.props;
@@ -260,7 +266,7 @@ class Home extends Component {
                                         <img src={this.state.profileData.data.profile_picture} className="profile_img" alt={this.state.profileData.data.username}/>
                                     </IconButton>
                                     <Menu {...bindMenu(popupState)} className="menu-container">
-                                        <MenuItem onClick={popupState.close} divider>My Account</MenuItem>
+                                        <MenuItem onClick={this.profile} divider>My Account</MenuItem>
                                         <MenuItem onClick={this.logout}>Logout</MenuItem>
                                     </Menu>
                                 </React.Fragment>
